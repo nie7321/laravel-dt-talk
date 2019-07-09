@@ -18,26 +18,28 @@
 
 ---
 
-# TODO: showcase slide 1
-- what you get out of the box
+# [fit] Examples
 
 ---
 
-# TODO: showcase slide 2
-- all the bells and whistles
-    - column select
-    - exports
-    - sticky header
-    - reorganized UI elements
-    - multi-column ordering
-    - expandable
+![inline autoplay](./assets/zero-config.mov)
 
-^ This is just a showcase for some of the cooler features you get. You *probably* don't want to combine all of this, but for demo purposes...
+^ This is what you get when you instantiate it on a table. In the example, the table has data (in `<tr>`s) already.
 
 ---
 
-# TODO: showcase slide 3
-- radically different DT.n look (NLA)
+![inline autoplay](./assets/bells-whistles.mov)
+
+^ So here we see column select (w/ one column not hidable and one not shown by default), multi-column sort, CSV export, not default visibility, sticky header
+
+^ This is just a showcase for some of the cooler features you get. There are even more -- column groups, complex headers, reorderable columns, etc.
+
+^ Codepen for this: https://codepen.io/nie7321/full/jjXGNL
+
+---
+
+![inline autoplay](./assets/nla-demo.mov)
+
 
 ^ Don't worry, it's all fake data (:hearts: faker)
 
@@ -140,6 +142,16 @@
 ^ I should mention DataTables.net Editor. It's a paid first-party addon that lets you add/update/delete rows in tables. It's got a whole AJAX protocol for submitting & dealing with validation errors. Licensing is per-dev (across all the apps you want) @ US$120 per head (one time). 
 
 ^ The Laravel datatables package supports doing server-side stuff for it, but I have yet to try it out.
+
+---
+
+# Testing
+- Use Laravel Dusk
+- Doing a bog-standard phpunit test for the controller(s) is painful
+
+^ The table is very interactive and it does a lot of stuff on the client & server side. I really recommend a functional testing tool, like Laravel Dusk, for your tests here.
+
+^ I do have a helper for doing controller tests, but it's not great.
 
 ---
 
