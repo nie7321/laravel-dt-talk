@@ -38,17 +38,6 @@
 
 ---
 
-![inline autoplay](./assets/nla-demo.mov)
-
-
-^ Don't worry, it's all fake data (:hearts: faker)
-
-^ But this is starting to not look like DataTables.net anymore. A lot of its stock UI elements have been stripped and replaced with buttons and the sidebar panels containing per-field search filters.
-
-^ We used to have checkboxes too, which interacted w/ DataTables.net Buttons for server-side shenanigans.
-
----
-
 # AJAX
 - DT.n has full support for making everything server-side
     - Pagination & sorting
@@ -59,6 +48,16 @@
 ^ Sometimes with small tables, you can get away with just dumping your whole dataset into the page as JSON and doing client-side manipulations. But that doesn't scale.
 
 ^ So it has a whole thing for communicating with the server. It can get kind of complicated when you add more and more features, like multi-column sorting and a bunch of filters.
+
+---
+
+![inline autoplay](./assets/nla-demo.mov)
+
+^ Don't worry, it's all fake data (:hearts: faker)
+
+^ This one is server-side in a Laravel app. You notice this is starting to not look like DataTables.net anymore. A lot of its stock UI elements have been stripped and replaced with buttons and the sidebar panels containing per-field search filters.
+
+^ We used to have checkboxes too, which interacted w/ DataTables.net Buttons for server-side shenanigans.
 
 ---
 
