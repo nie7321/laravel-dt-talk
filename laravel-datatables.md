@@ -144,6 +144,20 @@
 
 ---
 
+# We need a DB
+- We'll make an HR database.
+    - `php artisan migrate:fresh --seed`
+
+![inline](./assets/demo-db.png)
+
+^ I have some stuff prepared to build and populate a DB, so we'll let that run. Real basic though!
+
+---
+
+# Wiring up the DT Service
+
+---
+
 # Alternative: Set up a query and return it
 - This is a good way to approach simpler stuff
 - DataTable config JS stays in the views where it belongs
