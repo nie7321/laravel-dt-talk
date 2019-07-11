@@ -26,7 +26,7 @@
                     <a class="nav-link" href="/server-side">Server-side DT</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Disabled</a>
+                    <a class="nav-link" href="/filterable">Filterable DT</a>
                 </li>
             </ul>
             <form class="form-inline my-2 my-lg-0">

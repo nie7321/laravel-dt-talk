@@ -242,7 +242,14 @@
 ---
 
 # Cooler Filters
-todo
+- OK, now let's add a more specific filter
+- We'll put it on the top row next to the global search input
+- Make it a cool UI element with `bootstrap-select`
+- Can only filter on columns that DT.n knows about
+    - So we'll tell it about it
+    - But now that shows in the colvis button!
+
+^ Colvis gets a filter
 
 ---
 

@@ -16,3 +16,4 @@ Route::get('/', function () {
 });
 
 Route::get('/server-side', 'ServerSideController');
+Route::get('/filterable', 'FilterableController');
