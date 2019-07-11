@@ -237,7 +237,7 @@
 
 ^ The getBuilderParameters method is defined in the parent, so we'll override it. This lets us control the DT.n config that will be injected into the page.
 
-^ Fix the button / filter size mismatch w/ js snippet in the template.
+^ Fix the button / filter size mismatch w/ js snippet in the view. Also, make it stripey in the view.
 
 ---
 
