@@ -135,12 +135,9 @@
 - `php artisan datatables:make ServerSide`
     - Makes `App\DataTables\ServerSideDataTable`
 
-- Lots of boilerplate
-    - We care about `getColumns()`, `query()`, and `datatable()` (to start) 
-
 ^ As much as I find it gross to put JS snippets in PHP strings, I do feel like putting all this together makes it easier to manage big complex DataTables.
 
-^ We'll wire this up to some models I have prepared.
+^ But before we can wire this up to our models, we'll need a database!
 
 ---
 
@@ -155,37 +152,142 @@
 ---
 
 # Wiring up the DT Service
+- Define `query()`
+    - Query ties in to our model -- any global scopes (like `SoftDeletes`) are respected
+    - Can explicitly call scopes, add `where()` conditions, etc
+    - Don't want to put `ORDER BY` or filtering here, though -- this is JUST the "base" query for the table
+
+- Define `getColumns()` w/ stuff from our models
+    - `title` is the title, `data` and `name` should be the JSON path
+    - `visible`, `class`, `render` optional
 
 ---
 
-# Alternative: Set up a query and return it
-- This is a good way to approach simpler stuff
-- DataTable config JS stays in the views where it belongs
+# Writing the View
+```php
+@extends('layouts.app')
+
+@section('content')
+<h1>AJAXy DataTable</h1>
+<p>This page demonstrates DT.n wired up to your Eloquent models.</p>
+
+{!! $dataTable->table() !!}
+@endsection
+
+@push('scripts')
+{!! $dataTable->scripts() !!}
+@endpush
+```
+
+^ The view is very straightforward. So much so, that it's the slide!
+
+^ Now that all of this is done, let's have a look at the page.
+
+^ You notice the 'Processing' UI element. We've got our default buttons, and our data is here.
+
+^ The service class knows how to do the sorting for all your columns right out of the box.
+
+^ The search bar fails with a SQL error. The DB boolean column (onboarding) also looks a little nasty.
+
+---
+
+# Render Callbacks
+- We can make the onboarding column nicer with a `render` callback.
+
+- These are JS snippets that execute inside a callback function:
+
+    ```js
+    function (data, type, full, meta) {
+        return YOUR_CODE_HERE;
+    }
+    ```
+
+    - `data` is the cell's value
+    - `full` is the object for the whole row -- you can access other attributes
+    - dunno what the other two are !
+
+^ This is a bit gnarly, but we'll enable a render function for that. It's adding a little bit of 
+
+---
+
+# Fix the Search
+- When `APP_DEBUG = true`, the DT service class will include queries + SQL errors in the AJAX responses
+    - Look in your network inspector
+
+- `SQLSTATE[42703]: Undefined column: 7 ERROR:  column employees.clerical_name does not exist`
+    - We need to tell it how to filter for this
+    - We can do that in `dataTable()` with a `filterColumn`
+
+- Can go further -- replace apostrophes with a wildcard, to deal with names like `O'Connor`
+
+^ It will make reasonable assumptions for most columns, but this is one we calculated.
+
+^ So we just have to tell it how to filter for this one value we made up by concatenating the name together.
 
 ---
 
 # Make the UX better
 - Let's redesign our table a bit
-    - Get rid of some elements w/ `dom`
-- Add our own filter controls & wire them up
-- Make the pages bigger
-- Turn on sticky headers
+    - Fix the stuff not aligned w/ `dom`
+    - Change the buttons
+    - Make the pages bigger
+
+- Define `getBuilderParameters()`
+    - Control *all the things*!
+
+^ The getBuilderParameters method is defined in the parent, so we'll override it. This lets us control the DT.n config that will be injected into the page.
+
+^ Fix the button / filter size mismatch w/ js snippet in the template.
 
 ---
 
-# Scoping to Our User
-- Scopes are a way of injecting data from your controller into the DT.n service class
-    - IMO `Auth` facade is kinda gross
+# Cooler Filters
+todo
 
 ---
 
-# Export to CSV
-- DT.n has CSV/Excel/PDF exports out of the box
-    - But it's a client-side export, so it only exports 1 page of AJAX'd data
+# Wrapping Up
 
-- `yajra/laravel-datatables` redefines the export button definitions for server-side exports!
+^ I'd like to cover a lot more, but I am running out of time to make my slides & examples
 
-^ One caveat: if you're bolting this in to an existing app w/ DT.n, **this JS redefines the export button definitions**. If you have any non-yajra DTs, their exports will break!
+---
+
+# More Advanced Stuff
+- DT.n Service Class scopes
+    - Inject current user -- `Auth::user()->id` ~= `$_GLOBALS`
+
+```php
+use Yajra\DataTables\Contracts\DataTableScope;
+
+class UserScope implements DataTableScope
+{
+    protected $user;
+
+    public function __construct($user)
+    {
+        $this->user = $user;
+    }
+
+    public function apply($query)
+    {
+        return $query->where('user_id', $this->user->id);
+    }
+}
+
+// In your controller...
+return $dataTable
+    ->addScope(new UserScope($request->user()->id))
+    ->render('server-side');
+```
+
+---
+
+# Custom Buttons
+- You can implement your own buttons
+- It'll submit your action w/ all the DT.n order/filter stuff
+- So you can work w/ all the rows that match the current filter!
+
+^ TODO: example?
 
 ---
 
