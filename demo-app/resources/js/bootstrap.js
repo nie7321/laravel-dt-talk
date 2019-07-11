@@ -11,7 +11,15 @@ try {
     window.$ = window.jQuery = require('jquery');
 
     require('bootstrap');
-} catch (e) {}
+    require('datatables.net-buttons-bs4')($);
+
+    // require('./buttons.server-side.js'); // DataTables.net Buttons from the Laravel bindings package
+
+    // Normally, you'd want to load all the button definitions. But with the laravel-datatables package, we're
+    // going to load custom definitions for most of the buttons (which are exports). So, we'll just load this
+    // one specific entirely-client-side button def to start.
+    require('datatables.net-buttons/js/buttons.colVis'); // Load after the custom button definitions
+} catch (e) { }
 
 /**
  * We'll load the axios HTTP library which allows us to easily issue requests

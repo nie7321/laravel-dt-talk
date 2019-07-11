@@ -81,16 +81,39 @@
 
 ---
 
-# Setup
-- New Laravel app
+# Setup DT.n JS libs in Laravel
 - Install DT.n and desired addons via yarn
-    - Add to app.js & app.css, compile (via mix)
-- Install Laravel package via composer
-    - `php artisan something` to make the service class
+    - `yarn add datatables.net datatables.net-bs4 datatables.net-buttons datatables.net-buttons-bs4 datatables.net-dt`
 
-^ Laravel Mix is the asset pipeline. It's webpack except a smart person figured everything out and then gave us a Fisher-Price config file.
+- Add to app.js (via bootstrap.js) & app.css, compile
+    - `yarn run dev` to run webpack
 
-^ We'll talk about the DataTable service class more soon. It's my preferred way of implementing this, but there are several less-complex approaches where you just add a couple lines of code to your controller and Magic happens.
+- I have a template w/ a basic initialization to see if we've installed it properly
+    - I also set up a site layout w/ the mix'd assets
+    - Table is copied from the DT.n basic initialization example
+    - Magic is in the JS
+        - A little bit of extra magic to enable colvis button + align properly for Bootstrap
+
+^ We will start with a brand-new Laravel app skeleton. The DT.n packages are all up on the NPM package registry, so I'll yarn install them. 
+
+^ I will be using the Bootstrap styling for DT.n, cuz Laravel already has Bootstrap in its `packages.json`. 
+
+^ We're grabbing the DT.n Buttons extension, which has our column visbility & CSV/Excel/etc buttons.
+
+^ Laravel Mix is the asset pipeline. It's webpack, except a smart person figured everything out and then gave us a Fisher-Price config file.
+
+^ I've got the dependencies already installed. Take a look at the bootstrap.js & app.css files, then look at the first view.
+
+---
+
+# Setup `laravel-datatables`
+- Install Laravel package
+    - `composer require yajra/laravel-datatables`
+    - Docs @ https://yajrabox.com/docs/laravel-datatables
+
+^ The package we're installing comes with support for DT.n Buttons & DT.n Editor. Can install more specific packages if you want less.
+
+^ 
 
 ---
 
