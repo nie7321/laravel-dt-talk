@@ -7,6 +7,5 @@
 require('./bootstrap');
 
 // require('./buttons.server-side.js'); // DataTables.net Buttons from the Laravel bindings package
-// require('datatables.net-buttons/js/buttons.colVis'); // Load after the custom button definitions
 
 // All the Vue boilerplate removed -- don't need it slowing down my webpack build :-)

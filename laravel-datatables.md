@@ -102,28 +102,45 @@
 
 ^ Laravel Mix is the asset pipeline. It's webpack, except a smart person figured everything out and then gave us a Fisher-Price config file.
 
-^ I've got the dependencies already installed. Take a look at the bootstrap.js & app.css files, then look at the first view.
+^ I've got the dependencies already installed. Take a look at the bootstrap.js & app.css files, then look at the first view!
 
 ---
 
 # Setup `laravel-datatables`
 - Install Laravel package
     - `composer require yajra/laravel-datatables`
+    - `php artisan vendor:publish --tag=datatables && php artisan vendor:publish --tag=datatables-buttons`
     - Docs @ https://yajrabox.com/docs/laravel-datatables
 
-^ The package we're installing comes with support for DT.n Buttons & DT.n Editor. Can install more specific packages if you want less.
+- Put `buttons.server-side.js` into the Mix
+    - `mv public/vendor/datatables/buttons.server-side.js resources/js/`
+    - Update `app.js` & rebuild
 
-^ 
+^ The package we're installing comes with support for DT.n Buttons & DT.n Editor. Can install more specific packages if you want less. 
+
+^ The second command will publish its configs to the `config/` directory. There are some settings here that control how searching works (case sensitivity, wildcards, etc). The defaults are fine for this demo, though!
+
+^ The buttons publish will also drop a `buttons.server-side.js` file in your `public/js` dir. We'll just put that into the Mix pipeline.
 
 ---
 
-# Building Out the Service
-- Service class can be used in a controller
+# DataTables as a Service
+- DT service class is how I prefer to use this
+    - There are simpler ways for "basic" DTs, but all of mine have been complex
+
 - Centralizes the ORM stuff, DT.n config, and any other DT-related code
-- Violates separation of the M & V parts of MVC a little bit, but is worth it
+    - Violates separation of the M & V parts of MVC a little bit, but is worth it
     - Stuff like DT.n `render` callback JS ends up in your PHP files 😨
 
+- `php artisan datatables:make ServerSide`
+    - Makes `App\DataTables\ServerSideDataTable`
+
+- Lots of boilerplate
+    - We care about `getColumns()`, `query()`, and `datatable()` (to start) 
+
 ^ As much as I find it gross to put JS snippets in PHP strings, I do feel like putting all this together makes it easier to manage big complex DataTables.
+
+^ We'll wire this up to some models I have prepared.
 
 ---
 
