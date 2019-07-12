@@ -357,8 +357,10 @@ $browser->click('#some-link')->waitUntilTextMissing('.dataTables_empty', 'Loadin
 - DataTables.net docs have lots of examples
 - https://yajrabox.com/docs/laravel-datatables
 
-- Talk & source code are available on GitHub
-    - https://todo
+- Talk & app source code are available on GitHub
+    - https://github.com/nie7321/laravel-dt-talk
+
+![left fit](./assets/repo-qr.png)
 
 ^ The QR code goes to the github repo. iPhone users, just hold your camera up & it'll recognize it.
 
