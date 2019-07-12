@@ -69,7 +69,7 @@ class FilterableDataTable extends DataTable
 
         $params['pageLength'] = 25;
 
-        // $params['dom'] = '<"row"<"col-md-2"B><"col-md-4 ml-auto"f>>rtp';
+        $params['dom'] = '<"row"<"col-md-2"B><"col-md-4 ml-auto"f>>rtp';
 
         /*
         // Note the <"#type-filter"> -- this adds an empty <div id="type-filter">so we can put some extra filters on top!

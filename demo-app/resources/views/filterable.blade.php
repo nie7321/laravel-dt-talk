@@ -39,6 +39,8 @@ $(document).ready(function () {
         var api = $('#dataTableBuilder').DataTable(); // gets us access to the DT.n object
         var employment_type_id_list = $('#employment-type-filter').val(); // get the IDs from the <select>
 
+        // Note that the .draw() is what actually fires the AJAX request. If you have multiple filters, you'll
+        // want to call .search() for each, then call .draw() *ONCE* !
         api.column('employment_type.id:name').search(JSON.stringify(employment_type_id_list), false, false, false).draw();
     });
     */

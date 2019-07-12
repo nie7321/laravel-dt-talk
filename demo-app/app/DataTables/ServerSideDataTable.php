@@ -58,6 +58,8 @@ class ServerSideDataTable extends DataTable
         // dd($params);
 
         $params['pageLength'] = 25;
+
+        // https://datatables.net/reference/option/dom
         $params['dom'] = '<"row"<"col-md-2"B><"col-md-4 ml-auto"f>>rtp';
 
         $params['language']['search'] = '';

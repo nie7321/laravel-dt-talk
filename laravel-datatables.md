@@ -2,6 +2,8 @@
 ## with DataTables.net & Laravel
 #### Presented by Nick Evans, Senior Dev @ Northwestern IT
 
+![](./assets/weber-arch.jpg)
+
 ---
 
 # DataTables.net
@@ -19,6 +21,8 @@
 ---
 
 # [fit] Examples
+
+![](./assets/dt-examples.png)
 
 ---
 
@@ -73,7 +77,7 @@
 
 ---
 
-# [fit] Walkthrough !
+# [fit] Let's do it!
 
 ^ OK so now we're going to go through setting everything up and writing some code.
 
@@ -86,7 +90,7 @@
     - `yarn add datatables.net datatables.net-bs4 datatables.net-buttons datatables.net-buttons-bs4 datatables.net-dt`
 
 - Add to app.js (via bootstrap.js) & app.css, compile
-    - `yarn run dev` to run webpack
+    - `yarn run dev`
 
 - I have a template w/ a basic initialization to see if we've installed it properly
     - I also set up a site layout w/ the mix'd assets
@@ -100,14 +104,14 @@
 
 ^ We're grabbing the DT.n Buttons extension, which has our column visbility & CSV/Excel/etc buttons.
 
-^ Laravel Mix is the asset pipeline. It's webpack, except a smart person figured everything out and then gave us a Fisher-Price config file.
+^ Laravel Mix is the asset pipeline. It's webpack, except a smart person figured everything out and then gave us a Fisher-Price config file. Big fan, but it's another talk :-)
 
 ^ I've got the dependencies already installed. Take a look at the bootstrap.js & app.css files, then look at the first view!
 
 ---
 
 # Setup `laravel-datatables`
-- Install Laravel package
+- Install Laravel package - Eloquent <-> JSON 'protocol' for DT
     - `composer require yajra/laravel-datatables`
     - `php artisan vendor:publish --tag=datatables && php artisan vendor:publish --tag=datatables-buttons`
     - Docs @ https://yajrabox.com/docs/laravel-datatables
@@ -120,7 +124,7 @@
 
 ^ The second command will publish its configs to the `config/` directory. There are some settings here that control how searching works (case sensitivity, wildcards, etc). The defaults are fine for this demo, though!
 
-^ The buttons publish will also drop a `buttons.server-side.js` file in your `public/js` dir. We'll just put that into the Mix pipeline.
+^ The buttons publish will also drop a `buttons.server-side.js` file in your `public/js` dir. We'll just put that into the Mix pipeline instead. This tells the built-in CSV/etc buttons to do an AJAX request instead to get all pages of data!
 
 ---
 
@@ -134,6 +138,8 @@
 
 - `php artisan datatables:make ServerSide`
     - Makes `App\DataTables\ServerSideDataTable`
+
+^ Service class is a bit heavy, in terms of how much stuff you'll need to do.
 
 ^ As much as I find it gross to put JS snippets in PHP strings, I do feel like putting all this together makes it easier to manage big complex DataTables.
 
@@ -164,6 +170,9 @@
 ---
 
 # Writing the View
+- I have a small controller 
+- Service class can be injected & render views
+
 ```php
 @extends('layouts.app')
 
@@ -283,7 +292,7 @@ class UserScope implements DataTableScope
 
 // In your controller...
 return $dataTable
-    ->addScope(new UserScope($request->user()->id))
+    ->addScope(new UserScope($request->user()))
     ->render('server-side');
 ```
 
@@ -292,14 +301,28 @@ return $dataTable
 # Custom Buttons
 - You can implement your own buttons
 - It'll submit your action w/ all the DT.n order/filter stuff
-- So you can work w/ all the rows that match the current filter!
+- https://yajrabox.com/docs/laravel-datatables/master/buttons-custom
 
-^ TODO: example?
+```php
+public function customAction()
+{
+    // These are the models that match your current filters
+    // for a 'Select All'-type situation
+    $model_list = array_map(function ($row) {
+        return $row['id'];
+    }, $this->getAjaxResponseData());
+
+    // do something...
+}
+```
+
+^ The manual explains how to set it up in the service class, but here's how to get everything for a 'Select All', which we've found useful!
 
 ---
 
 # [fit] DT.n Editor
-^ TODO: bg of editor
+
+![](./assets/dt-editor.png)
 
 ^ I should mention DataTables.net Editor. It's a paid first-party addon that lets you add/update/delete rows in tables. It's got a whole AJAX protocol for submitting & dealing with validation errors. Licensing is per-dev (across all the apps you want) @ US$120 per head (one time). 
 
@@ -309,11 +332,24 @@ return $dataTable
 
 # Testing
 - Use Laravel Dusk
-- Doing a bog-standard phpunit test for the controller(s) is painful
 
-^ The table is very interactive and it does a lot of stuff on the client & server side. I really recommend a functional testing tool, like Laravel Dusk, for your tests here.
+```php
+// For AJAX tables, you'll want to wait until the AJAX finishes. Here's a helpful macro to detect that:
+Browser::macro('waitUntilTextMissing', function ($selector, $text, $seconds = null) {
+    // :contains() is not a real CSS selector; its a jQuery extension to selectors.
+    // Useful here, since DT.n's "No data in table" and "Loading" are inside the same element.
+    return $this->waitUntil("$('$selector:contains(\"$text\")').length === 0", $seconds);
+});
 
-^ I do have a helper for doing controller tests, but it's not great.
+// And then in your Dusk tests:
+$browser->click('#some-link')->waitUntilTextMissing('.dataTables_empty', 'Loading');
+```
+
+- Doing a bog-standard phpunit test for the controller(s) is awkward
+
+^ The table is very interactive and it does a lot of stuff on the client & server side. I really recommend a functional testing tool, like Laravel Dusk, for your tests here. 
+
+^ I do have a helper for doing controller tests, but it's not great. If you want it, ping me. I'm not including it in my demo app because I don't want to encourage you to go down this path.
 
 ---
 
