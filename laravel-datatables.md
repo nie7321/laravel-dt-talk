@@ -114,7 +114,6 @@
 - Install Laravel package - Eloquent <-> JSON 'protocol' for DT
     - `composer require yajra/laravel-datatables`
     - `php artisan vendor:publish --tag=datatables && php artisan vendor:publish --tag=datatables-buttons`
-    - Docs @ https://yajrabox.com/docs/laravel-datatables
 
 - Put `buttons.server-side.js` into the Mix
     - `mv public/vendor/datatables/buttons.server-side.js resources/js/`
@@ -258,6 +257,8 @@
     - So we'll tell it about it
     - But now that shows in the colvis button!
 
+^ Say I want to run a report on Interns + Temps, so we can give them all a raise.
+
 ^ Colvis gets a filter
 
 ---
@@ -295,6 +296,8 @@ return $dataTable
     ->addScope(new UserScope($request->user()))
     ->render('server-side');
 ```
+
+^ Say I wanted to show some users JUST their direct reports...
 
 ---
 
